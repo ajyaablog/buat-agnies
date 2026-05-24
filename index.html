@@ -11,19 +11,20 @@
   <link rel="apple-touch-icon" href="icon-192.png">
 
   <!-- Google Fonts & Confetti Library -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
   <style>
     /* ==========================================
-       CSS - DESAIN & TATA LETAK (RESPONSIF)
+       CSS - DESAIN GLASSMORPHISM & ANIMASI MODERN
        ========================================== */
     :root {
-      --bg-gradient: linear-gradient(135deg, #FFE5EC, #FFC2D1);
-      --primary-color: #FB6F92;
-      --secondary-color: #FFE5EC;
-      --text-color: #4A4A4A;
-      --card-bg: rgba(255, 255, 255, 0.75);
+      --primary-gradient: linear-gradient(135deg, #FF758F, #FF8FA3);
+      --text-main: #2D3142;
+      --text-sub: #4F5D75;
+      --glass-light: rgba(255, 255, 255, 0.45);
+      --glass-dark: rgba(0, 0, 0, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.35);
     }
 
     * {
@@ -33,44 +34,99 @@
     }
 
     body {
-      font-family: 'Quicksand', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-color);
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      /* Animasi pergeseran gradien latar belakang */
+      background: linear-gradient(-45deg, #FFC2D1, #FFE5EC, #FFD6E0, #FFB3C1);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
     }
 
-    /* Container Utama */
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Elemen Hiasan Latar Belakang (Soft Blur Circles) */
+    .bg-decorations {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .decor {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+      animation: floatMotion infinite alternate ease-in-out;
+    }
+
+    .pink-bubble {
+      background: rgba(255, 182, 193, 0.5);
+      top: 10%;
+      left: -10%;
+      width: 250px;
+      height: 250px;
+      animation-duration: 18s;
+    }
+
+    .rose-bubble {
+      background: rgba(255, 117, 143, 0.25);
+      bottom: -10%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      animation-duration: 22s;
+    }
+
+    @keyframes floatMotion {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -30px) scale(1.1); }
+    }
+
+    /* Wadah Aplikasi Utama (Frame) */
     #app {
       position: relative;
       width: 100%;
-      max-width: 450px;
+      max-width: 420px;
       height: 100vh;
       max-height: 850px;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      border-radius: 24px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    @media (max-height: 600px) {
+    @media (max-width: 480px) {
       #app {
-        height: 100%;
+        height: 100vh;
+        max-height: 100vh;
         border-radius: 0;
+        border: none;
       }
     }
 
-    /* Transisi Antar Layar */
+    /* Navigasi Layar */
     .screen {
       display: none;
       opacity: 0;
-      transition: opacity 0.6s ease-in-out;
+      transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -89,71 +145,177 @@
       z-index: 10;
     }
 
-    /* Tipografi */
+    /* Tipografi Estetik */
     h1 {
       font-family: 'Playfair Display', serif;
       font-size: 2rem;
+      font-weight: 700;
       color: #D85A7F;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
+      line-height: 1.3;
     }
 
     p {
-      font-size: 1rem;
+      font-size: 0.95rem;
       line-height: 1.6;
-      margin-bottom: 20px;
+      color: var(--text-sub);
     }
 
-    /* Tombol */
+    /* Kartu Glassmorphic */
+    .glass-card {
+      background: var(--glass-light);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(255, 117, 143, 0.1);
+      width: 100%;
+      margin-bottom: 25px;
+    }
+
+    /* Tombol Interaktif */
     .btn {
-      background: var(--primary-color);
+      background: var(--primary-gradient);
       color: white;
       border: none;
-      padding: 12px 30px;
-      font-size: 1rem;
+      padding: 14px 36px;
+      font-size: 0.95rem;
       font-weight: 600;
-      border-radius: 25px;
+      letter-spacing: 0.5px;
+      border-radius: 30px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(251, 111, 146, 0.4);
-      transition: transform 0.2s, background 0.2s;
-      font-family: 'Quicksand', sans-serif;
+      box-shadow: 0 4px 15px rgba(255, 117, 143, 0.4);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-family: 'Montserrat', sans-serif;
     }
 
     .btn:hover {
-      transform: scale(1.05);
-      background: #E05275;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 117, 143, 0.5);
     }
 
+    /* Micro-interaction saat ditekan/di-tap */
     .btn:active {
-      transform: scale(0.95);
+      transform: scale(0.95) translateY(1px);
     }
 
-    /* Layar 2: Storyline */
-    .story-card {
+    /* ==========================================
+       LAYAR 2 - CAROUSEL / INSTAGRAM STORY STYLE
+       ========================================== */
+    .carousel-container {
+      position: relative;
       width: 100%;
-      background: white;
-      border-radius: 15px;
+      height: 100%;
       overflow: hidden;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
+      cursor: pointer;
     }
 
-    .story-img {
+    .story-progress-container {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      right: 15px;
+      display: flex;
+      gap: 5px;
+      z-index: 100;
+    }
+
+    .story-progress-bar {
+      height: 4px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .story-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+      transition: width 0.1s linear;
+    }
+
+    .story-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 250px;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      pointer-events: none;
+    }
+
+    .story-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .story-img-full {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
+      z-index: 1;
     }
 
-    .story-text {
-      padding: 15px;
+    /* Degradasi hitam di bagian bawah foto agar teks mudah terbaca */
+    .story-slide::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+      z-index: 2;
+    }
+
+    .story-text-overlay {
+      position: relative;
+      margin: 0 20px 40px 20px;
+      padding: 24px;
+      background: var(--glass-dark);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      color: #ffffff;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .story-text-overlay p {
+      color: #ffffff;
       font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    /* Layar 3: Lilin Interaktif */
+    /* Area Ketuk Navigasi Samping */
+    .nav-tap-area {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 25%;
+      z-index: 50;
+    }
+    .nav-tap-left { left: 0; }
+    .nav-tap-right { right: 0; }
+
+    /* ==========================================
+       LAYAR 3 - LILIN ULANG TAHUN INTERAKTIF
+       ========================================== */
     .candle-container {
       position: relative;
       width: 120px;
       height: 200px;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
     .candle {
@@ -161,10 +323,10 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 45px;
+      width: 35px;
       height: 120px;
       background: linear-gradient(to right, #ffccd5, #ffb3c1);
-      border-radius: 8px 8px 4px 4px;
+      border-radius: 6px 6px 4px 4px;
       box-shadow: inset -5px 0 10px rgba(0,0,0,0.05);
     }
 
@@ -174,17 +336,17 @@
       left: 50%;
       transform: translateX(-50%);
       width: 4px;
-      height: 18px;
+      height: 16px;
       background: #4A4A4A;
     }
 
     .flame {
       position: absolute;
-      bottom: 135px;
+      bottom: 132px;
       left: 50%;
       transform: translateX(-50%) scale(1);
       width: 20px;
-      height: 45px;
+      height: 42px;
       background: radial-gradient(circle at bottom, #ff9f43, #ff3838);
       border-radius: 50% 50% 20% 20%;
       box-shadow: 0 0 20px rgba(255, 159, 67, 0.8);
@@ -204,36 +366,48 @@
     }
 
     .blow-instruction {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-style: italic;
-      color: #888;
+      color: var(--text-sub);
       margin-top: 10px;
     }
 
     .manual-btn {
       background: transparent;
-      border: 1px dashed var(--primary-color);
-      color: var(--primary-color);
-      padding: 6px 15px;
+      border: 1px dashed var(--text-sub);
+      color: var(--text-sub);
+      padding: 8px 16px;
       font-size: 0.8rem;
-      margin-top: 10px;
-      border-radius: 15px;
+      margin-top: 15px;
+      border-radius: 20px;
       cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      transition: all 0.2s;
     }
 
-    /* Layar 4: Surat Typewriter */
+    .manual-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* ==========================================
+       LAYAR 4 - SURAT TYPEWRITER
+       ========================================== */
     .letter-box {
-      background: white;
-      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
       padding: 25px;
       width: 100%;
       min-height: 250px;
-      max-height: 400px;
+      max-height: 420px;
       overflow-y: auto;
       text-align: left;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
-      border: 1px solid #FFE5EC;
-      font-family: 'Quicksand', sans-serif;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #3a3a3a;
       white-space: pre-wrap;
     }
 
@@ -241,7 +415,7 @@
       display: inline-block;
       width: 2px;
       height: 1.2rem;
-      background-color: var(--primary-color);
+      background-color: #FF758F;
       animation: blink 0.7s infinite;
       vertical-align: middle;
     }
@@ -253,54 +427,73 @@
 </head>
 <body>
 
+  <!-- Animasi Gelembung Latar Belakang -->
+  <div class="bg-decorations">
+    <div class="decor pink-bubble"></div>
+    <div class="decor rose-bubble"></div>
+  </div>
+
   <div id="app">
 
     <!-- LAYAR 1: LANDING -->
     <div id="screen-1" class="screen active">
-      <h1 id="landing-title">Hai! Agnies Nur Afidah</h1>
-      <p id="landing-sub">Ini adalah sebuah hadiah kecil yang kubuat khusus untukmu. Semoga kamu suka, ya! ❤️</p>
+      <div class="glass-card" style="margin-bottom: 30px;">
+        <h1 id="landing-title">Hai! Agnies Nur Afidah</h1>
+        <p id="landing-sub">Ada sebuah bingkisan digital kecil yang kubuat khusus untukmu di hari spesial ini. ❤️</p>
+      </div>
       <button class="btn" onclick="nextScreen(2)">Mulai</button>
     </div>
 
-    <!-- LAYAR 2: STORYLINE -->
-    <div id="screen-2" class="screen">
-      <h1>Kilas Balik 📸</h1>
-      <div class="story-card">
-        <img id="story-image" src="" alt="Foto Kenangan" class="story-img">
-        <p id="story-text" class="story-text"></p>
+    <!-- LAYAR 2: STORYLINE (INSTAGRAM STORY CAROUSEL) -->
+    <div id="screen-2" class="screen" style="padding: 0;">
+      <div class="carousel-container" id="story-carousel-container">
+        
+        <!-- Progress Bar at the top -->
+        <div class="story-progress-container" id="story-progress-container"></div>
+        
+        <!-- Deteksi Tap Kanan/Kiri -->
+        <div class="nav-tap-area nav-tap-left" onclick="prevStorySlide()"></div>
+        <div class="nav-tap-area nav-tap-right" onclick="nextStorySlide()"></div>
+
+        <!-- Wadah Gambar Slide (diisi via JS) -->
+        <div id="slides-wrapper" style="width: 100%; height: 100%;"></div>
+
       </div>
-      <button class="btn" id="story-btn" onclick="nextStory()">Lanjut</button>
     </div>
 
     <!-- LAYAR 3: INTERAKSI LILIN -->
     <div id="screen-3" class="screen">
-      <h1 id="candle-title">Tiup Lilinnya! 🎂</h1>
-      <p id="candle-sub">Ucapkan permohonanmu terlebih dahulu di dalam hati...</p>
+      <div class="glass-card">
+        <h1 id="candle-title">Tiup Lilinnya! 🎂</h1>
+        <p id="candle-sub" style="font-size: 0.9rem;">Pejamkan matamu dan ucapkan permohonan terbaikmu terlebih dahulu...</p>
+      </div>
       <div class="candle-container">
         <div class="wick"></div>
         <div class="flame" id="flame"></div>
         <div class="candle"></div>
       </div>
-      <p class="blow-instruction" id="blow-hint">Tiup mikrofon HP-mu secara perlahan untuk meniup lilin.</p>
-      <button class="manual-btn" id="manual-blow-btn" onclick="padamkanLilin()">Atau klik di sini untuk meniup manual</button>
+      <p class="blow-instruction" id="blow-hint">Tiup mikrofon HP-mu secara perlahan.</p>
+      <button class="manual-btn" id="manual-blow-btn" onclick="padamkanLilin()">Gunakan Tiupan Manual</button>
       <button class="btn" id="after-candle-btn" style="display: none; margin-top: 15px;" onclick="nextScreen(4)">Buka Surat</button>
     </div>
 
     <!-- LAYAR 4: PESAN AKHIR (SURAT) -->
     <div id="screen-4" class="screen">
-      <h1>Surat Untukmu ✉️</h1>
+      <h1 style="margin-bottom: 20px;">Surat Untukmu ✉️</h1>
       <div class="letter-box">
         <span id="letter-text"></span><span class="cursor" id="letter-cursor"></span>
       </div>
-      <button class="btn" id="letter-btn" style="display: none; margin-top: 20px;" onclick="nextScreen(5)">Lanjut</button>
+      <button class="btn" id="letter-btn" style="display: none; margin-top: 25px;" onclick="nextScreen(5)">Lanjut</button>
     </div>
 
     <!-- LAYAR 5: PENUTUP -->
     <div id="screen-5" class="screen">
-      <h1>Terima Kasih ❤️</h1>
-      <p id="closing-initial">Terima kasih telah menemani hari-hariku hingga saat ini.</p>
+      <div class="glass-card" style="margin-bottom: 30px;">
+        <h1>Terima Kasih ❤️</h1>
+        <p id="closing-initial">Terima kasih telah menemani perjalananku hingga saat ini dan membuat segalanya terasa lebih bermakna.</p>
+        <p id="final-msg" style="display: none; font-weight: 500; color: #D85A7F; font-size: 1rem;"></p>
+      </div>
       <button class="btn" id="finish-btn" onclick="showFinalMessage()">Selesai</button>
-      <p id="final-msg" style="display: none; font-weight: 600; color: #D85A7F; margin-top: 20px; font-size: 1.1rem;"></p>
     </div>
 
   </div>
@@ -312,32 +505,32 @@
     const CONFIG = {
       namaPacar: "Agnies Nur Afidah",
       
-      // Layar 2: Daftar foto dan cerita (Anda dapat menambah atau mengurangi slide di sini)
+      // Layar 2: Foto dan cerita bergaya Instagram Story (Slide bisa ditambah/dikurangi)
       storyline: [
         {
           fotoUrl: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600", // Ganti dengan link foto Anda berdua
-          cerita: "Ingatkah kamu saat kita pertama kali saling menyapa? Hari itu duniaku menjadi sedikit lebih cerah."
+          cerita: "Ingatkah kamu saat pertama kali duniaku bersinggungan dengan duniamu? Sejak hari itu, semua hal biasa menjadi terasa istimewa."
         },
         {
           fotoUrl: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600", // Ganti dengan link foto kedua
-          cerita: "Setiap tawa, canda, dan cerita yang kita lalui bersama adalah bagian favorit dalam keseharianku."
+          cerita: "Setiap tawa yang kita bagi, obrolan larut malam kita, dan kenyamanan yang tercipta di antara kita adalah memori terbaikku."
         },
         {
           fotoUrl: "https://images.unsplash.com/photo-1494972308805-463bc619d34e?q=80&w=600", // Ganti dengan link foto ketiga
-          cerita: "Dan hari ini, di hari yang sangat istimewa ini, aku ingin menghentikan waktu sejenak untuk bersyukur atas kehadiranmu..."
+          cerita: "Kini, di hari yang sangat indah ini, aku hanya ingin mendoakan segala hal baik selalu mengelilingi setiap langkahmu..."
         }
       ],
 
-      // Layar 3: Sensitivitas tiupan mikrofon (0 - 100). Semakin kecil nilainya, semakin sensitif pendeteksian tiupan.
-      sensitivitasTiupan: 40,
+      // Layar 3: Sensitivitas input tiupan (Amplitudo suara 0 - 100). Lebih kecil = lebih sensitif.
+      sensitivitasTiupan: 45,
 
-      // Layar 4: Surat Romantis (Gunakan \n untuk baris baru)
+      // Layar 4: Surat romantis (Dapat menggunakan \n untuk baris baru)
       suratRomantis: "Selamat ulang tahun, Agnies Sayang...\n\nDi hari bertambahnya usiamu ini, aku ingin mengucapkan terima kasih karena telah memilih untuk singgah dan bertahan di hidupku. Bersamamu, aku belajar banyak tentang arti kenyamanan dan arti dicintai secara utuh.\n\nSemoga semua langkah yang kamu ambil dimudahkan, mimpi-mimpimu didekatkan, dan bahagia selalu menyertaimu di setiap harinya. Aku akan selalu ada di sini untuk menemanimu berproses.\n\nAku menyayangimu, selalu. ❤️",
-      kecepatanKetik: 50 // milidetik per karakter
+      kecepatanKetik: 50 // milidetik per karakter saat efek mengetik aktif
     };
 
     /* ==========================================
-       LOGIKA SISTEM (Hati-hati jika ingin mengedit)
+       LOGIKA UTAMA APLIKASI
        ========================================== */
     let currentScreen = 1;
     let currentStoryIndex = 0;
@@ -345,11 +538,15 @@
     let analyser;
     let microphone;
     let isCandleActive = false;
+    
+    // Swipe Gestures Tracking
+    let touchStartX = 0;
+    let touchEndX = 0;
 
-    // Set Teks Landing di Awal
-    document.getElementById('landing-title').innerText = `Hai! ${CONFIG.namaPacar}, ini untukmu`;
+    // Menampilkan Nama di Layar Pertama
+    document.getElementById('landing-title').innerText = `Hai! ${CONFIG.namaPacar}`;
 
-    // Fungsi Navigasi Layar
+    // Navigasi Antar Layar
     function showScreen(screenId) {
       document.querySelectorAll('.screen').forEach(s => {
         s.classList.remove('active');
@@ -357,14 +554,13 @@
       });
       const target = document.getElementById(`screen-${screenId}`);
       target.style.display = 'flex';
-      // Memicu reflow browser agar animasi transisi CSS bekerja
-      target.offsetHeight; 
+      
+      target.offsetHeight; // Memaksa reflow halaman agar animasi transisi berjalan lancar
       target.classList.add('active');
       currentScreen = screenId;
 
-      // Trigger fungsi khusus berdasarkan layar yang aktif
       if (screenId === 2) {
-        loadStory();
+        setupStoryCarousel();
       } else if (screenId === 3) {
         initMic();
       } else if (screenId === 4) {
@@ -376,26 +572,95 @@
       showScreen(nextId);
     }
 
-    /* SISTEM LAYAR 2 (Storyline) */
-    function loadStory() {
-      const story = CONFIG.storyline[currentStoryIndex];
-      document.getElementById('story-image').src = story.fotoUrl;
-      document.getElementById('story-text').innerText = story.cerita;
+    /* SISTEM LAYAR 2 (Swipeable Instagram-style Carousel) */
+    function setupStoryCarousel() {
+      const slidesWrapper = document.getElementById('slides-wrapper');
+      const progressContainer = document.getElementById('story-progress-container');
       
-      const btn = document.getElementById('story-btn');
-      if (currentStoryIndex === CONFIG.storyline.length - 1) {
-        btn.innerText = "Lanjut";
+      slidesWrapper.innerHTML = '';
+      progressContainer.innerHTML = '';
+
+      CONFIG.storyline.forEach((story, idx) => {
+        // Membuat elemen Slide Foto & Teks
+        const slide = document.createElement('div');
+        slide.className = `story-slide ${idx === 0 ? 'active' : ''}`;
+        slide.innerHTML = `
+          <img src="${story.fotoUrl}" alt="Story ${idx+1}" class="story-img-full">
+          <div class="story-text-overlay">
+            <p>${story.cerita}</p>
+          </div>
+        `;
+        slidesWrapper.appendChild(slide);
+
+        // Membuat Progress Bar indikator atas
+        const bar = document.createElement('div');
+        bar.className = 'story-progress-bar';
+        bar.innerHTML = `<div class="story-progress-fill" id="progress-fill-${idx}"></div>`;
+        progressContainer.appendChild(bar);
+      });
+
+      currentStoryIndex = 0;
+      updateProgressBars();
+      setupSwipeEvents();
+    }
+
+    function updateProgressBars() {
+      CONFIG.storyline.forEach((_, idx) => {
+        const fill = document.getElementById(`progress-fill-${idx}`);
+        if (idx < currentStoryIndex) {
+          fill.style.width = '100%';
+        } else if (idx === currentStoryIndex) {
+          fill.style.width = '100%';
+        } else {
+          fill.style.width = '0%';
+        }
+      });
+    }
+
+    function nextStorySlide() {
+      const slides = document.querySelectorAll('.story-slide');
+      if (currentStoryIndex < CONFIG.storyline.length - 1) {
+        slides[currentStoryIndex].classList.remove('active');
+        currentStoryIndex++;
+        slides[currentStoryIndex].classList.add('active');
+        updateProgressBars();
       } else {
-        btn.innerText = "Selanjutnya";
+        nextScreen(3);
       }
     }
 
-    function nextStory() {
-      if (currentStoryIndex < CONFIG.storyline.length - 1) {
-        currentStoryIndex++;
-        loadStory();
-      } else {
-        nextScreen(3);
+    function prevStorySlide() {
+      const slides = document.querySelectorAll('.story-slide');
+      if (currentStoryIndex > 0) {
+        slides[currentStoryIndex].classList.remove('active');
+        currentStoryIndex--;
+        slides[currentStoryIndex].classList.add('active');
+        updateProgressBars();
+      }
+    }
+
+    // Mendeteksi Gestur Geser (Swipe) di HP
+    function setupSwipeEvents() {
+      const container = document.getElementById('story-carousel-container');
+      
+      container.addEventListener('touchstart', e => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+
+      container.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].clientX;
+        handleSwipeGesture();
+      }, { passive: true });
+    }
+
+    function handleSwipeGesture() {
+      const threshold = 40; // Jarak minimal sapuan jari
+      if (touchStartX - touchEndX > threshold) {
+        // Geser ke kiri -> lanjut
+        nextStorySlide();
+      } else if (touchEndX - touchStartX > threshold) {
+        // Geser ke kanan -> kembali
+        prevStorySlide();
       }
     }
 
@@ -418,17 +683,16 @@
             if (!isCandleActive) return;
             analyser.getByteTimeDomainData(dataArray);
             
-            // Hitung amplitudo suara (volume tiupan)
+            // Hitung amplitudo amplitudo rata-rata sinyal audio untuk pendeteksian
             let maxVal = 0;
             for (let i = 0; i < bufferLength; i++) {
               const val = Math.abs(dataArray[i] - 128);
               if (val > maxVal) maxVal = val;
             }
 
-            // Jika melampaui ambang batas sensitivitas, lilin padam
+            // Jika volume tiupan melampaui konfigurasi batas sensitivitas
             if (maxVal > CONFIG.sensitivitasTiupan) {
               padamkanLilin();
-              // Hentikan penggunaan mikrofon setelah berhasil ditiup
               stream.getTracks().forEach(track => track.stop());
               audioContext.close();
             } else {
@@ -438,7 +702,7 @@
           checkBlow();
         })
         .catch(function(err) {
-          console.warn("Akses mikrofon ditolak atau tidak didukung, menggunakan mode manual.", err);
+          console.warn("Akses mikrofon ditolak atau tidak didukung oleh perangkat. Gunakan tombol tiup manual.", err);
         });
     }
 
@@ -446,49 +710,48 @@
       if (!isCandleActive) return;
       isCandleActive = false;
 
-      // Animasi Lilin Padam
+      // Matikan Api Lilin
       document.getElementById('flame').classList.add('out');
       document.getElementById('candle-title').innerText = `Happy Birthday, ${CONFIG.namaPacar}! 🎉`;
-      document.getElementById('candle-sub').innerText = "Semoga apa yang disemogakan tersemogakan, ya!";
+      document.getElementById('candle-sub').innerText = "Semoga senyum manismu selalu merekah di tahun ini.";
       document.getElementById('blow-hint').style.display = 'none';
       document.getElementById('manual-blow-btn').style.display = 'none';
       
-      // Ledakan Confetti
-      celebrateConfetti();
+      // Ledakan Confetti Romantis
+      triggerConfetti();
 
-      // Memunculkan tombol lanjut setelah jeda singkat
       setTimeout(() => {
         document.getElementById('after-candle-btn').style.display = 'inline-block';
       }, 1500);
     }
 
-    function celebrateConfetti() {
-      const duration = 3 * 1000;
-      const end = Date.now() + duration;
+    function triggerConfetti() {
+      const duration = 4 * 1000;
+      const animationEnd = Date.now() + duration;
 
       (function frame() {
         confetti({
-          particleCount: 3,
+          particleCount: 4,
           angle: 60,
           spread: 55,
           origin: { x: 0 },
           colors: ['#ffccd5', '#ffb3c1', '#ff85a1', '#fbb1bd']
         });
         confetti({
-          particleCount: 3,
+          particleCount: 4,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
           colors: ['#ffccd5', '#ffb3c1', '#ff85a1', '#fbb1bd']
         });
 
-        if (Date.now() < end) {
+        if (Date.now() < animationEnd) {
           requestAnimationFrame(frame);
         }
       }());
     }
 
-    /* SISTEM LAYAR 4 (Efek Typewriter) */
+    /* SISTEM LAYAR 4 (Efek Mesin Ketik) */
     function startTypewriter() {
       const text = CONFIG.suratRomantis;
       const container = document.getElementById('letter-text');
@@ -515,10 +778,9 @@
       document.getElementById('finish-btn').style.display = 'none';
       
       const finalMsg = document.getElementById('final-msg');
-      finalMsg.innerText = "Terima kasih, kenangan ini sekarang tersimpan di hatimu.";
+      finalMsg.innerText = "Terima kasih, kenangan ini sekarang tersimpan hangat di hatimu.";
       finalMsg.style.display = 'block';
 
-      // Confetti efek penutup lembut
       confetti({
         particleCount: 150,
         spread: 80,
@@ -526,12 +788,12 @@
       });
     }
 
-    // Registrasi Service Worker untuk PWA
+    // Registrasi Service Worker PWA
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('Service Worker terdaftar secara sukses:', reg.scope))
-          .catch(err => console.log('Gagal mendaftarkan Service Worker:', err));
+          .then(reg => console.log('Service Worker terdaftar di skop:', reg.scope))
+          .catch(err => console.error('Pendaftaran Service Worker gagal:', err));
       });
     }
   </script>
